@@ -1,0 +1,70 @@
+<html layout:decorate="~{layout/bootstrap}">
+
+<head>
+	<title>Reward Results</title>
+</head>
+
+<div layout:fragment="content">
+	<h2>Reward Results</h2>
+	
+	<div class="mb-3">
+		<label for="searchFilter">Search:</label>
+		<input type="text" id="searchFilter" class="form-control" placeholder="Type to filter results...">
+	</div>
+	
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Email</th>
+				<th>Phone</th>
+				<th>Preferred Stand</th>
+				<th>Seat</th>
+			</tr>
+		</thead>
+		<tbody id="rewardResultsTable">
+			<tr th:each="result: ${rewardResults}">
+				<td th:text="${result.first_name}">John</td>
+				<td th:text="${result.last_name}">Doe</td>
+				<td th:text="${result.email}">johndoe@dummy.edu</td>
+				<td th:text="${result.phone}">xxx-xxxx-xxxx</td>
+				<td th:text="${result.stand_id}">East</td>
+				<td th:text="${result.seat_id}">E001</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div>
+		<button onclick="location.href='/'">Back to Preference Page</button>
+	</div>
+
+	<script>
+		document.getElementById('searchFilter').addEventListener('input', function() {
+			const filter = this.value.toLowerCase();
+			const tbody = document.getElementById('rewardResultsTable');
+			const rows = tbody.getElementsByTagName('tr');
+			
+			for (let i = 0; i < rows.length; i++) {
+				const cells = rows[i].getElementsByTagName('td');
+				let found = false;
+				
+				for (let j = 0; j < cells.length; j++) {
+					const cellText = cells[j].textContent || cells[j].innerText;
+					if (cellText.toLowerCase().indexOf(filter) > -1) {
+						found = true;
+						break;
+					}
+				}
+				
+				if (found || filter === '') {
+					rows[i].style.display = '';
+				} else {
+					rows[i].style.display = 'none';
+				}
+			}
+		});
+	</script>
+</div>
+
+</html>
